@@ -13,6 +13,10 @@
         <p>Para começar, por favor, informe os dados do seu veículo.</p>
         <form id="form-setup">
             <div class="form-group">
+                <label for="nome_usuario">Seu Nome:</label>
+                <input type="text" id="nome_usuario" name="nome_usuario" placeholder="Ex: João Silva" required>
+            </div>
+            <div class="form-group">
                 <label for="modelo_veiculo">Modelo do Veículo:</label>
                 <input type="text" id="modelo_veiculo" name="modelo_veiculo" placeholder="Ex: Honda Civic" required>
             </div>
@@ -31,7 +35,7 @@
     <!-- Container Principal do App (escondido por padrão) -->
     <div id="app-container" style="display: none;" class="container">
         <header>
-            <h1>Meu Controle de Combustível</h1>
+            <h1 id="welcome-message">Meu Controle de Combustível</h1>
             <p id="vehicle-info-display" style="font-style: italic; color: #555;"></p>
         </header>
         
@@ -80,6 +84,8 @@
                     <th>Tipo</th>
                     <th>Odômetro (km)</th>
                     <th>Litros</th>
+                    <th>Valor (R$)</th>
+                    <th>Preço/L (R$)</th>
                     <th>Distância (km)</th>
                     <th>Consumo (km/L)</th>
                 </tr>
