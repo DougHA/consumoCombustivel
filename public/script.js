@@ -1,11 +1,81 @@
 document.addEventListener('DOMContentLoaded', () => { // Garante que o DOM esteja completamente carregado antes de executar o script.
     // Seleciona os elementos do DOM.
-    const form = document.getElementById('form-abastecimento');
+    const formAbastecimento = document.getElementById('form-abastecimento');
     const corpoTabela = document.getElementById('corpo-tabela');
+    const litrosInput = document.getElementById('litros');
+    const valorAbastecidoInput = document.getElementById('valor_abastecido');
+    const valorLitroInput = document.getElementById('valor_litro');
     const apiUrl = 'http://localhost:3000/api/abastecimentos';
 
+    // Elementos da tela de setup e containers
+    const appContainer = document.getElementById('app-container');
+    const setupContainer = document.getElementById('setup-container');
+    const formSetup = document.getElementById('form-setup');
+    const vehicleInfoDisplay = document.getElementById('vehicle-info-display');
+
+    // Função para exibir os dados do veículo no cabeçalho
+    function displayVehicleInfo(config) {
+        if (config && config.modelo && config.ano) {
+            vehicleInfoDisplay.textContent = `Veículo: ${config.modelo} ${config.ano}`;
+        }
+    }
+
+    // Lógica de inicialização do app
+    const vehicleConfig = JSON.parse(localStorage.getItem('vehicleConfig'));
+
+    if (!vehicleConfig) {
+        // Se não houver configuração, mostra a tela de setup (o "popup")
+        setupContainer.style.display = 'block';
+    } else {
+        // Se já houver, mostra o app principal
+        appContainer.style.display = 'block';
+        displayVehicleInfo(vehicleConfig);
+        carregarHistorico();
+    }
+
+    // Listener para o formulário de setup inicial
+    formSetup.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const config = {
+            modelo: document.getElementById('modelo_veiculo').value,
+            ano: document.getElementById('ano_veiculo').value,
+            odometroInicial: parseFloat(document.getElementById('odometro_inicial').value)
+        };
+        localStorage.setItem('vehicleConfig', JSON.stringify(config));
+
+        // Esconde o setup e mostra o app principal
+        setupContainer.style.display = 'none';
+        appContainer.style.display = 'block';
+        displayVehicleInfo(config);
+        carregarHistorico(); // Carrega o histórico (vazio) pela primeira vez
+    });
+
+    // Função para calcular e atualizar o valor por litro automaticamente.
+    function calcularValorPorLitro() {
+        const litros = parseFloat(litrosInput.value);
+        const valorTotal = parseFloat(valorAbastecidoInput.value);
+
+        if (litros > 0 && valorTotal > 0) {
+            const valorPorLitro = valorTotal / litros;
+            valorLitroInput.value = valorPorLitro.toFixed(3);
+        } else {
+            valorLitroInput.value = '';
+        }
+    }
+
+    // Adiciona listeners para recalcular ao digitar.
+    litrosInput.addEventListener('input', calcularValorPorLitro);
+    valorAbastecidoInput.addEventListener('input', calcularValorPorLitro);
     // Função para carregar e exibir o histórico.
     async function carregarHistorico() {
+        const vehicleConfig = JSON.parse(localStorage.getItem('vehicleConfig'));
+        // Se o app foi iniciado, a config deve existir.
+        // Esta verificação é uma segurança extra.
+        if (!vehicleConfig) {
+            corpoTabela.innerHTML = '<tr><td colspan="6">Por favor, configure seu veículo.</td></tr>';
+            return;
+        }
+
         try { // Faz uma requisição GET para buscar o histórico de abastecimentos.
             const response = await fetch(apiUrl); // A URL da API deve ser a mesma que o servidor está ouvindo.
             // Verifica se a resposta foi bem-sucedida.
@@ -26,16 +96,23 @@ document.addEventListener('DOMContentLoaded', () => { // Garante que o DOM estej
             // Itera sobre o histórico para calcular e exibir os dados.
             for (let i = 0; i < historico.length; i++) {
                 const atual = historico[i];
-                const anterior = historico[i + 1]; // O próximo na lista, pois está ordenado DESC.
+                const anterior = historico[i + 1]; // O registro cronologicamente anterior
 
                 let distancia = '-'; // Inicializa a distância como um traço, indicando que não há dados disponíveis.
-                // Calcula a distância percorrida desde o último abastecimento.
                 let consumo = '-'; // Inicializa o consumo como um traço, indicando que não há dados disponíveis.
 
+                let odometroAnterior;
+
                 if (anterior) {
-                    distancia = (atual.odometro - anterior.odometro).toFixed(1);
-                    // O consumo é calculado com base nos litros do abastecimento ATUAL.
-                    // para percorrer a distância até o PRÓXIMO abastecimento.
+                    odometroAnterior = anterior.odometro;
+                } else {
+                    // Se não houver registro anterior, usa o odômetro inicial da configuração
+                    odometroAnterior = vehicleConfig.odometroInicial;
+                }
+
+                if (atual.odometro > odometroAnterior) {
+                    distancia = (atual.odometro - odometroAnterior).toFixed(1);
+                    // Calcula o consumo para o trecho percorrido
                     consumo = (distancia / atual.litros).toFixed(2);
                 }
                 // Cria uma nova linha na tabela com os dados do abastecimento atual.
@@ -60,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => { // Garante que o DOM estej
     }
 
     // Função para adicionar um novo abastecimento.
-    form.addEventListener('submit', async (event) => {
+    formAbastecimento.addEventListener('submit', async (event) => {
         event.preventDefault(); // Impede o recarregamento da página.
 
         const novoAbastecimento = { // Cria um objeto com os dados do formulário.
@@ -88,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => { // Garante que o DOM estej
             }
 
             // Limpa o formulário e recarrega o histórico.
-            form.reset();
+            formAbastecimento.reset();
             carregarHistorico();
 
         } catch (error) { // Captura erros na requisição ou processamento dos dados.
@@ -97,7 +174,4 @@ document.addEventListener('DOMContentLoaded', () => { // Garante que o DOM estej
             alert(`Erro ao salvar: ${error.message}`);
         }
     });
-
-    // Carrega o histórico inicial ao carregar a página.
-    carregarHistorico();
 });

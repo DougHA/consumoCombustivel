@@ -7,9 +7,34 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Meu Controle de Combustível</h1>
+    <!-- Tela de Configuração Inicial (escondida por padrão) -->
+    <div id="setup-container" style="display: none;" class="container">
+        <h1>Bem-vindo!</h1>
+        <p>Para começar, por favor, informe os dados do seu veículo.</p>
+        <form id="form-setup">
+            <div class="form-group">
+                <label for="modelo_veiculo">Modelo do Veículo:</label>
+                <input type="text" id="modelo_veiculo" name="modelo_veiculo" placeholder="Ex: Honda Civic" required>
+            </div>
+            <div class="form-group">
+                <label for="ano_veiculo">Ano do Veículo:</label>
+                <input type="number" id="ano_veiculo" name="ano_veiculo" placeholder="Ex: 2023" required>
+            </div>
+            <div class="form-group">
+                <label for="odometro_inicial">Odômetro Inicial (km):</label>
+                <input type="number" id="odometro_inicial" name="odometro_inicial" step="0.1" placeholder="Ex: 50000.0" required>
+            </div>
+            <button type="submit">Salvar e Iniciar</button>
+        </form>
+    </div>
 
+    <!-- Container Principal do App (escondido por padrão) -->
+    <div id="app-container" style="display: none;" class="container">
+        <header>
+            <h1>Meu Controle de Combustível</h1>
+            <p id="vehicle-info-display" style="font-style: italic; color: #555;"></p>
+        </header>
+        
         <form id="form-abastecimento">
             <h2>Adicionar Novo Abastecimento</h2>
             <div class="form-group">
@@ -25,8 +50,12 @@
                 <input type="number" id="litros" step="0.01" placeholder="Ex: 45.50" required>
             </div>
             <div class="form-group">
+                <label for="valor_abastecido">Valor Abastecido (R$):</label>
+                <input type="number" id="valor_abastecido" step="0.01" placeholder="Ex: 250.00" required>
+            </div>
+            <div class="form-group">
                 <label for="valor_litro">Valor por Litro (R$):</label>
-                <input type="number" id="valor_litro" step="0.01" placeholder="Ex: 5.89">
+                <input type="number" id="valor_litro" step="0.001" placeholder="Calculado automaticamente" readonly>
             </div>
             <div class="form-group">
                 <label for="tipo_combustivel">Tipo de Combustível:</label>
@@ -59,7 +88,6 @@
                 <!-- Os dados serão inseridos aqui via JavaScript -->
             </tbody>
         </table>
-    </div>
 
     <script src="script.js"></script>
 </body>
