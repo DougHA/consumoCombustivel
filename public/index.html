@@ -38,22 +38,28 @@
         </form>
     </div>
 
-    <!-- Container Principal do App (escondido por padrão) -->
-    <div id="app-container" style="display: none;" class="container">
-        <header>
-            <div class="row" style="margin-bottom: 0;">
-                <div class="col s9">
-                    <h1 id="welcome-message" style="margin: 0; font-size: 2.5rem;">Meu Controle de Combustível</h1>
-                    <p id="vehicle-info-display" style="font-style: italic; margin-top: 5px;"></p>
-                </div>
-                <div class="col s3 right-align">
-                    <div class="switch" style="margin-top: 20px;">
-                        <label>Claro<input type="checkbox" id="theme-switcher"><span class="lever"></span>Escuro</label>
-                    </div>
-                </div>
+    <!-- Gatilho do Menu Lateral (agora posicionado via CSS) -->
+    <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+
+    <!-- Estrutura do Menu Lateral Fixo -->
+    <ul id="slide-out" class="sidenav sidenav-fixed">
+        <li>
+            <div class="user-view">
+                <a href="#!"><span class="white-text name" id="sidenav-user-name">Nome do Usuário</span></a>
+                <a href="#!"><span class="white-text email" id="sidenav-vehicle-info">Modelo e Ano</span></a>
             </div>
-        </header>
-        
+        </li>
+        <li><a class="waves-effect" href="/"><i class="material-icons">local_gas_station</i>Abastecimentos</a></li>
+        <li><div class="divider"></div></li>
+        <li><a class="subheader">Configurações</a></li>
+        <li>
+            <div class="switch" style="padding: 0 24px;">
+                <label>Claro<input type="checkbox" id="theme-switcher"><span class="lever"></span>Escuro</label>
+            </div>
+        </li>
+    </ul>
+
+    <main id="app-container" style="display: none;" class="container">
         <form id="form-abastecimento">
             <h2>Adicionar Novo Abastecimento</h2>
             <div class="input-field">
@@ -111,7 +117,7 @@
                 <!-- Os dados serão inseridos aqui via JavaScript -->
             </tbody>
         </table>
-    </div>
+    </main>
 
     <!-- Materialize JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>

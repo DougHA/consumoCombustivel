@@ -3,8 +3,92 @@ body {
     transition: background-color 0.3s, color 0.3s;
 }
 
-.container {
+/* --- Layout com Sidenav --- */
+
+/* Força o gatilho do menu a ser sempre visível */
+.sidenav-trigger {
+    position: fixed;
+    top: 10px;
+    left: 0;
+    width: 64px; /* Mesma largura do menu recolhido para alinhar */
+    display: flex !important; /* Sobrescreve o Materialize e permite o alinhamento */
+    justify-content: center; /* Centraliza o ícone horizontalmente */
+    z-index: 1001; /* Acima do sidenav para garantir que seja clicável */
+}
+
+
+/* Transições suaves para expandir/recolher */
+main {
+  padding-left: 300px;
+  transition: padding-left 0.3s ease-in-out;
+}
+
+.sidenav.sidenav-fixed {
+    transition: width 0.3s ease-in-out;
+}
+
+@media only screen and (max-width : 992px) {
+  main {
+    padding-left: 0;
+  }
+}
+
+/* --- Estilos para o Sidenav Recolhido --- */
+body.sidenav-collapsed .sidenav.sidenav-fixed {
+    width: 64px;
+    padding-top: 56px; /* Adiciona espaço no topo para alinhar os ícones abaixo do gatilho do menu */
+}
+
+body.sidenav-collapsed main {
+    padding-left: 64px;
+}
+
+/* Esconde o texto dos links, mas mantém os ícones */
+body.sidenav-collapsed .sidenav li > a {
+    display: flex; /* Adicionado para permitir o alinhamento horizontal */
+    justify-content: center;
+    padding: 0;
+    font-size: 0; /* Esconde o texto */
+}
+
+body.sidenav-collapsed .sidenav li > a > i.material-icons {
+    font-size: 24px; /* Restaura o tamanho do ícone */
     margin: 0;
+}
+
+/* Esconde elementos não essenciais no modo recolhido */
+body.sidenav-collapsed .sidenav .user-view,
+body.sidenav-collapsed .sidenav .divider,
+body.sidenav-collapsed .sidenav .subheader,
+body.sidenav-collapsed .sidenav .switch {
+    display: none;
+}
+
+.sidenav .user-view {
+    background-color: #1976d2; /* Azul Primário */
+    padding-bottom: 16px; /* Ajuste para compensar a falta da imagem */
+}
+
+body.dark-theme .sidenav .user-view {
+    background-color: #3700b3; /* Cor roxa do tema escuro */
+}
+
+/* --- Estilos de Botões e Acentos --- */
+.btn, .btn:focus {
+    background-color: #1976d2; /* Azul Primário */
+}
+
+.btn:hover {
+    background-color: #1565c0; /* Azul Primário (mais escuro) */
+}
+
+body.dark-theme .btn, body.dark-theme .btn:focus {
+    background-color: #bb86fc; /* Roxo Acento */
+    color: #121212; /* Texto escuro para contraste */
+}
+
+.container {
+    margin: 0 auto;
     padding: 0;
     max-width: 100%;
     width: 100%;
@@ -13,17 +97,23 @@ body {
 /* Centraliza o conteúdo principal */
 #setup-container, #app-container {
     max-width: 960px;
-    margin: 2rem auto;
+    margin: 0 auto;
     padding: 2rem;
     border-radius: 8px;
 }
 
 h1 {
+    color: #0d47a1;
     font-size: 2.5rem;
 }
 
 h2 {
+    color: #0d47a1;
     font-size: 2rem;
+}
+
+hr {
+    border-color: #e0e0e0;
 }
 
 /* --- Tema Escuro --- */
@@ -51,6 +141,26 @@ body.dark-theme h6 {
     color: #bb86fc;
 }
 
+body.dark-theme hr {
+    border-color: #424242;
+}
+
+body.dark-theme .sidenav {
+    background-color: #2c2c2c;
+}
+
+body.dark-theme .sidenav li > a {
+    color: #e0e0e0;
+}
+
+body.dark-theme .sidenav li > a > i.material-icons {
+    color: #e0e0e0;
+}
+
+body.dark-theme .divider {
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
 body.dark-theme p {
     color: #bdbdbd;
 }
@@ -62,7 +172,8 @@ body.dark-theme .input-field label {
 
 body.dark-theme .input-field input[type=text]:not(.browser-default),
 body.dark-theme .input-field input[type=number]:not(.browser-default),
-body.dark-theme .input-field input[type=url]:not(.browser-default) {
+body.dark-theme .input-field input[type=url]:not(.browser-default),
+.dark-theme .datepicker {
     color: #e0e0e0;
     border-bottom: 1px solid #e0e0e0;
 }
@@ -70,6 +181,16 @@ body.dark-theme .input-field input[type=url]:not(.browser-default) {
 body.dark-theme .input-field input:not(.browser-default):focus {
     border-bottom: 1px solid #bb86fc !important;
     box-shadow: 0 1px 0 0 #bb86fc !important;
+}
+
+/* --- Tema Claro (Inputs) --- */
+.input-field input:not(.browser-default):focus+label {
+    color: #1976d2 !important;
+}
+
+.input-field input:not(.browser-default):focus {
+    border-bottom: 1px solid #1976d2 !important;
+    box-shadow: 0 1px 0 0 #1976d2 !important;
 }
 
 /* Select (Dropdown) */
@@ -95,8 +216,16 @@ body.dark-theme .datepicker-modal {
     background-color: #2c2c2c;
 }
 
+.datepicker-date-display {
+    background-color: #1976d2; /* Azul Primário */
+}
+
 body.dark-theme .datepicker-date-display {
     background-color: #3700b3;
+}
+
+.datepicker-table td.is-selected {
+    background-color: #1976d2; /* Azul Primário */
 }
 
 body.dark-theme .datepicker-table td.is-selected {
@@ -107,6 +236,11 @@ body.dark-theme .datepicker-table a {
     color: #e0e0e0;
 }
 
-body.dark-theme .datepicker-cancel, .datepicker-done {
+.datepicker-cancel, .datepicker-done {
+    color: #1976d2;
+}
+
+body.dark-theme .datepicker-cancel,
+body.dark-theme .datepicker-done {
     color: #bb86fc;
 }

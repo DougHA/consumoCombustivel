@@ -4,6 +4,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectElems = document.querySelectorAll('select');
     M.FormSelect.init(selectElems);
 
+    // Sidenav (para mobile)
+    const sidenavElems = document.querySelectorAll('.sidenav');
+    M.Sidenav.init(sidenavElems);
+
     // Date Picker
     const datepickerElems = document.querySelectorAll('.datepicker');
     M.Datepicker.init(datepickerElems, {
@@ -44,6 +48,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // --- Lógica do Sidenav Recolhível ---
+    const sidenavTrigger = document.querySelector('.sidenav-trigger');
+
+    function applySidenavState() {
+        const isDesktop = window.innerWidth > 992;
+        const isCollapsed = localStorage.getItem('sidenav_collapsed') === 'true';
+
+        if (isDesktop) {
+            if (isCollapsed) {
+                body.classList.add('sidenav-collapsed');
+            } else {
+                body.classList.remove('sidenav-collapsed');
+            }
+        } else {
+            // Em telas móveis, o menu nunca fica no estado "recolhido", apenas aberto ou fechado.
+            body.classList.remove('sidenav-collapsed');
+        }
+    }
+
+    sidenavTrigger.addEventListener('click', (e) => {
+        if (window.innerWidth > 992) {
+            e.preventDefault(); // Previne o comportamento padrão do Materialize em telas grandes
+            body.classList.toggle('sidenav-collapsed');
+            localStorage.setItem('sidenav_collapsed', body.classList.contains('sidenav-collapsed'));
+        }
+    });
+
 
     // Seleciona os elementos do DOM.
     const formAbastecimento = document.getElementById('form-abastecimento');
@@ -58,8 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const appContainer = document.getElementById('app-container');
     const setupContainer = document.getElementById('setup-container');
     const formSetup = document.getElementById('form-setup');
-    const vehicleInfoDisplay = document.getElementById('vehicle-info-display');
-    const welcomeMessage = document.getElementById('welcome-message');
+    const sidenavUserName = document.getElementById('sidenav-user-name');
+    const sidenavVehicleInfo = document.getElementById('sidenav-vehicle-info');
 
     // Variável global para armazenar a configuração do veículo
     let vehicleConfig = null;
@@ -67,10 +98,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Função para exibir os dados do veículo no cabeçalho
     function displayVehicleInfo(config) {
         if (config && config.nome_usuario) {
-            welcomeMessage.textContent = `Controle de Combustível de ${config.nome_usuario}`;
+            sidenavUserName.textContent = config.nome_usuario;
         }
         if (config && config.modelo && config.ano) {
-            vehicleInfoDisplay.textContent = `Veículo: ${config.modelo} ${config.ano}`;
+            sidenavVehicleInfo.textContent = `${config.modelo} ${config.ano}`;
         }
     }
     
@@ -79,7 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Aplica o tema salvo ao iniciar
         const savedTheme = localStorage.getItem('theme') || 'light'; // Padrão para tema claro
         setTheme(savedTheme);
-
+        // Aplica o estado do sidenav (recolhido/expandido) ao carregar
+        applySidenavState();
         try {
             const response = await fetch(vehicleApiUrl);
             if (response.ok) {
@@ -103,6 +135,9 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Não foi possível conectar ao servidor. Verifique se ele está rodando.');
         }
     }
+
+    // Garante que o layout se ajuste ao redimensionar a janela
+    window.addEventListener('resize', applySidenavState);
 
     // Listener para o formulário de setup inicial
     formSetup.addEventListener('submit', async (event) => {
@@ -148,6 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             valorLitroInput.value = '';
         }
+        M.updateTextFields(); // Atualiza as labels dos inputs para evitar sobreposição
     }
 
     // Adiciona listeners para recalcular ao digitar.
