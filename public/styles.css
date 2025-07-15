@@ -1,97 +1,112 @@
-/* /full/path/to/your/project/webapp-combustivel/public/styles.css */
+/* Estilos Gerais */
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f4f7f6;
-    color: #333;
-    margin: 0;
-    padding: 20px;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .container {
-    max-width: 800px;
-    margin: 0 auto;
-    background-color: #fff;
-    padding: 20px 30px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+    width: 100%;
 }
 
-h1, h2 {
-    color: #005a9c;
-    border-bottom: 2px solid #e0e0e0;
-    padding-bottom: 10px;
-    margin-top: 0;
+/* Centraliza o conteúdo principal */
+#setup-container, #app-container {
+    max-width: 960px;
+    margin: 2rem auto;
+    padding: 2rem;
+    border-radius: 8px;
+}
+
+h1 {
+    font-size: 2.5rem;
 }
 
 h2 {
-    margin-top: 30px;
+    font-size: 2rem;
 }
 
-.form-group {
-    margin-bottom: 15px;
+/* --- Tema Escuro --- */
+
+/* Body e Cores de Texto */
+body.dark-theme {
+    background-color: #121212;
+    color: #e0e0e0;
 }
 
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
+/* Containers e Cards */
+body.dark-theme .container,
+body.dark-theme .card-panel {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
 }
 
-input[type="date"],
-input[type="number"],
-select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-family: inherit; /* Garante que a fonte seja a mesma do body */
-    font-size: 1rem;      /* Garante que o tamanho da fonte seja consistente */
+/* Títulos */
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme h4,
+body.dark-theme h5,
+body.dark-theme h6 {
+    color: #bb86fc;
 }
 
-button {
-    background-color: #007bff;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    width: 100%;
+body.dark-theme p {
+    color: #bdbdbd;
 }
 
-button:hover {
-    background-color: #0056b3;
+/* Formulários e Inputs */
+body.dark-theme .input-field label {
+    color: #bb86fc;
 }
 
-hr {
-    border: 0;
-    height: 1px;
-    background: #e0e0e0;
-    margin: 40px 0;
+body.dark-theme .input-field input[type=text]:not(.browser-default),
+body.dark-theme .input-field input[type=number]:not(.browser-default),
+body.dark-theme .input-field input[type=url]:not(.browser-default) {
+    color: #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+body.dark-theme .input-field input:not(.browser-default):focus {
+    border-bottom: 1px solid #bb86fc !important;
+    box-shadow: 0 1px 0 0 #bb86fc !important;
 }
 
-th, td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: left;
+/* Select (Dropdown) */
+body.dark-theme .select-wrapper .caret {
+    fill: #e0e0e0;
 }
 
-th {
-    background-color: #f2f2f2;
-    font-weight: bold;
+body.dark-theme .dropdown-content {
+    background-color: #2c2c2c;
 }
 
-tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
+body.dark-theme .dropdown-content li>span {
+    color: #bb86fc;
 }
 
-tbody tr:hover {
-    background-color: #f1f1f1;
+/* Tabela */
+body.dark-theme table.striped>tbody>tr:nth-child(odd) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Date Picker */
+body.dark-theme .datepicker-modal {
+    background-color: #2c2c2c;
+}
+
+body.dark-theme .datepicker-date-display {
+    background-color: #3700b3;
+}
+
+body.dark-theme .datepicker-table td.is-selected {
+    background-color: #bb86fc;
+}
+
+body.dark-theme .datepicker-table a {
+    color: #e0e0e0;
+}
+
+body.dark-theme .datepicker-cancel, .datepicker-done {
+    color: #bb86fc;
 }

@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle de Combustível</title>
-    <link rel="stylesheet" href="styles.css">
+    <!-- Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css"> <!-- Seu CSS customizado (opcional) -->
 </head>
 <body>
     <!-- Tela de Configuração Inicial (escondida por padrão) -->
@@ -12,72 +16,85 @@
         <h1>Bem-vindo!</h1>
         <p>Para começar, por favor, informe os dados do seu veículo.</p>
         <form id="form-setup">
-            <div class="form-group">
+            <div class="input-field">
+                <input type="text" id="nome_usuario" name="nome_usuario" class="validate" required>
                 <label for="nome_usuario">Seu Nome:</label>
-                <input type="text" id="nome_usuario" name="nome_usuario" placeholder="Ex: João Silva" required>
             </div>
-            <div class="form-group">
+            <div class="input-field">
+                <input type="text" id="modelo_veiculo" name="modelo_veiculo" class="validate" required>
                 <label for="modelo_veiculo">Modelo do Veículo:</label>
-                <input type="text" id="modelo_veiculo" name="modelo_veiculo" placeholder="Ex: Honda Civic" required>
             </div>
-            <div class="form-group">
+            <div class="input-field">
+                <input type="number" id="ano_veiculo" name="ano_veiculo" class="validate" required>
                 <label for="ano_veiculo">Ano do Veículo:</label>
-                <input type="number" id="ano_veiculo" name="ano_veiculo" placeholder="Ex: 2023" required>
             </div>
-            <div class="form-group">
+            <div class="input-field">
+                <input type="number" id="odometro_inicial" name="odometro_inicial" step="0.1" class="validate" required>
                 <label for="odometro_inicial">Odômetro Inicial (km):</label>
-                <input type="number" id="odometro_inicial" name="odometro_inicial" step="0.1" placeholder="Ex: 50000.0" required>
             </div>
-            <button type="submit">Salvar e Iniciar</button>
+            <button class="btn waves-effect waves-light" type="submit">Salvar e Iniciar
+                <i class="material-icons right">send</i>
+            </button>
         </form>
     </div>
 
     <!-- Container Principal do App (escondido por padrão) -->
     <div id="app-container" style="display: none;" class="container">
         <header>
-            <h1 id="welcome-message">Meu Controle de Combustível</h1>
-            <p id="vehicle-info-display" style="font-style: italic; color: #555;"></p>
+            <div class="row" style="margin-bottom: 0;">
+                <div class="col s9">
+                    <h1 id="welcome-message" style="margin: 0; font-size: 2.5rem;">Meu Controle de Combustível</h1>
+                    <p id="vehicle-info-display" style="font-style: italic; margin-top: 5px;"></p>
+                </div>
+                <div class="col s3 right-align">
+                    <div class="switch" style="margin-top: 20px;">
+                        <label>Claro<input type="checkbox" id="theme-switcher"><span class="lever"></span>Escuro</label>
+                    </div>
+                </div>
+            </div>
         </header>
         
         <form id="form-abastecimento">
             <h2>Adicionar Novo Abastecimento</h2>
-            <div class="form-group">
+            <div class="input-field">
+                <input type="text" id="data" class="datepicker" required>
                 <label for="data">Data:</label>
-                <input type="date" id="data" required>
             </div>
-            <div class="form-group">
+            <div class="input-field">
+                <input type="number" id="odometro" step="0.1" class="validate" required>
                 <label for="odometro">Odômetro (km):</label>
-                <input type="number" id="odometro" step="0.1" placeholder="Ex: 50123.4" required>
             </div>
-            <div class="form-group">
+            <div class="input-field">
+                <input type="number" id="litros" step="0.01" class="validate" required>
                 <label for="litros">Litros Abastecidos:</label>
-                <input type="number" id="litros" step="0.01" placeholder="Ex: 45.50" required>
             </div>
-            <div class="form-group">
+            <div class="input-field">
+                <input type="number" id="valor_abastecido" step="0.01" class="validate" required>
                 <label for="valor_abastecido">Valor Abastecido (R$):</label>
-                <input type="number" id="valor_abastecido" step="0.01" placeholder="Ex: 250.00" required>
             </div>
-            <div class="form-group">
+            <div class="input-field">
+                <input type="number" id="valor_litro" step="0.001" readonly>
                 <label for="valor_litro">Valor por Litro (R$):</label>
-                <input type="number" id="valor_litro" step="0.001" placeholder="Calculado automaticamente" readonly>
             </div>
-            <div class="form-group">
-                <label for="tipo_combustivel">Tipo de Combustível:</label>
+            <div class="input-field">
                 <select id="tipo_combustivel">
-                    <option value="">Selecione...</option>
+                    <option value="" disabled selected>Selecione...</option>
                     <option value="Etanol">Etanol</option>
                     <option value="Gasolina">Gasolina</option>
                     <option value="Gasolina Aditivada">Gasolina Aditivada</option>
                     <option value="Diesel">Diesel</option>
                 </select>
+                <label for="tipo_combustivel">Tipo de Combustível:</label>
             </div>
-            <button type="submit">Salvar</button>
+            <button class="btn waves-effect waves-light" type="submit">Salvar
+                <i class="material-icons right">save</i>
+            </button>
         </form>
 
         <hr>
 
         <h2>Histórico e Consumo</h2>
-        <table id="tabela-historico">
+        <table id="tabela-historico" class="striped responsive-table">
             <thead>
                 <tr>
                     <th>Data</th>
@@ -94,7 +111,10 @@
                 <!-- Os dados serão inseridos aqui via JavaScript -->
             </tbody>
         </table>
+    </div>
 
+    <!-- Materialize JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

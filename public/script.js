@@ -1,4 +1,50 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Inicialização de Componentes Materialize ---
+    // Select
+    const selectElems = document.querySelectorAll('select');
+    M.FormSelect.init(selectElems);
+
+    // Date Picker
+    const datepickerElems = document.querySelectorAll('.datepicker');
+    M.Datepicker.init(datepickerElems, {
+        format: 'yyyy-mm-dd', // Formato compatível com o backend
+        autoClose: true,
+        i18n: { // Tradução para Português
+            months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+            monthsShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+            weekdays: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+            weekdaysShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+            weekdaysAbbrev: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
+            cancel: 'Cancelar',
+            clear: 'Limpar',
+            done: 'Ok'
+        }
+    });
+
+    // --- Lógica do Tema Escuro/Claro ---
+    const themeSwitcher = document.getElementById('theme-switcher');
+    const body = document.body;
+
+    function setTheme(theme) {
+        if (theme === 'dark') {
+            body.classList.add('dark-theme');
+            themeSwitcher.checked = true;
+        } else {
+            body.classList.remove('dark-theme');
+            themeSwitcher.checked = false;
+        }
+        localStorage.setItem('theme', theme);
+    }
+
+    themeSwitcher.addEventListener('change', () => {
+        if (themeSwitcher.checked) {
+            setTheme('dark');
+        } else {
+            setTheme('light');
+        }
+    });
+
+
     // Seleciona os elementos do DOM.
     const formAbastecimento = document.getElementById('form-abastecimento');
     const corpoTabela = document.getElementById('corpo-tabela');
@@ -30,6 +76,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Função de inicialização do app
     async function inicializarApp() {
+        // Aplica o tema salvo ao iniciar
+        const savedTheme = localStorage.getItem('theme') || 'light'; // Padrão para tema claro
+        setTheme(savedTheme);
+
         try {
             const response = await fetch(vehicleApiUrl);
             if (response.ok) {
